@@ -1,8 +1,20 @@
-// Admin Lte
-@import '../../node_modules/admin-lte/dist/css/adminlte.min.css';
-//Overlays Scrollbars
-@import '../../node_modules/overlayscrollbars/css/OverlayScrollbars.css';
-//Fonts
-@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700');
-//Fontawesome
-@import '../../node_modules/admin-lte/plugins/fontawesome-free/css/all.min.css'
+// Fonts
+@import url('https://fonts.googleapis.com/css?family=Nunito');
+
+// Variables
+@import 'variables';
+
+// Admin LTE
+@import '~admin-lte/dist/css/adminlte.min.css';
+
+// Overlay Scroolbars   
+@import '~overlayscrollbars/css/OverlayScrollbars.css';
+
+// Fontawesome
+@import '~admin-lte/plugins/fontawesome-free/css/all.min.css';
+
+// iCheck Bootstrap
+@import '~admin-lte/plugins/icheck-bootstrap/icheck-bootstrap.min.css';
+
+// // Bootstrap
+// @import '~bootstrap/scss/bootstrap';
