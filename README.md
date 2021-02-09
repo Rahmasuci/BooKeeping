@@ -6,6 +6,7 @@ v.2 Login & Register [Laravel Fortify](https://github.com/laravel/fortify) & [La
 
 v.3 Login with 2 different user and page 
     
-    1. `php artisan migrate`
-    2. `php artisan db:seed`
+    php artisan migrate
+    
+    php artisan db:seed
     
