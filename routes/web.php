@@ -1,7 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
+use App\Http\Controllers\PageController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\CategoryController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -9,12 +12,13 @@ Route::get('/', function () {
 
 Auth::routes();
 
+// USER
 Route::group([
     'prefix'        => 'user' ,
     'as'            => 'user.',      
     'middleware'    => ['auth','user'] 
 ], function(){
-    Route::get('/', [App\Http\Controllers\PageController::class, 'index']);
+    Route::get('/', [PageController::class, 'index']);
    
 });
 
@@ -24,7 +28,10 @@ Route::group([
     'as'            => 'admin.',
     'middleware'    => ['auth','admin'] 
 ], function(){
-    Route::get('/', [App\Http\Controllers\HomeController::class, 'index']);    
+    Route::get('/', [HomeController::class, 'index']);
+    Route::get('/users', [HomeController::class, 'user'])->name('users');
+    Route::resource('transactions', TransactionController::class);    
+    Route::resource('categories', CategoryController::class);    
 });
 
 

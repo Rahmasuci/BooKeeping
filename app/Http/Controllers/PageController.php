@@ -19,6 +19,6 @@ class PageController extends Controller
         $name = Auth::user()->name;
         $data = ['name' => $name];
         
-        return Inertia::render('UserHome', $data);
+        return Inertia::render('User/Index', $data);
     }
 }

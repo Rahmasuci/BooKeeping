@@ -43,6 +43,10 @@ class User extends Authenticatable
     ];
 
     public function role(){
-		  return $this->belongsTo('App\Models\Role', 'role_id');
+		return $this->belongsTo(Role::class, 'role_id');
+    }
+
+    public function category(){
+		  return $this->hasMany(Category::class, 'user_id');
     }
 }

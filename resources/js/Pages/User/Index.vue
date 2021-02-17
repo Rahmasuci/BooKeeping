@@ -12,8 +12,8 @@
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><inertia-link href="/home">Home</inertia-link></li>
-                            <li class="breadcrumb-item active">Blank Page</li>
+                            <li class="breadcrumb-item"><inertia-link href="/user">Home</inertia-link></li>
+                            <li class="breadcrumb-item active">Dashboard</li>
                             </ol>
                         </div>
                     </div>
@@ -26,9 +26,9 @@
 </template>
 
 <script>
-import Navbar from '../Shared/Navbar.vue'
-import Sidebar from '../Shared/AdminSidebar.vue'
-import Footer from '../Shared/Footer.vue'
+import Navbar from '../../Shared/Navbar'
+import Sidebar from '../../Shared/UserSidebar'
+import Footer from '../../Shared/Footer'
 export default {
     components: { Navbar, Sidebar, Footer },
     mounted() {

@@ -10,14 +10,14 @@
         "production": "mix --production"
     },
     "devDependencies": {
-        "axios": "^0.21",
+        "axios": "^0.21.1",
         "bootstrap": "^4.0.0",
         "jquery": "^3.2",
         "laravel-mix": "^6.0.6",
         "lodash": "^4.17.19",
         "popper.js": "^1.12",
         "postcss": "^8.1.14",
-        "resolve-url-loader": "^2.3.1",
+        "resolve-url-loader": "^3.1.2",
         "sass": "^1.20.1",
         "sass-loader": "^8.0.0",
         "vue": "^2.5.17",
@@ -30,6 +30,8 @@
         "@inertiajs/inertia-vue": "^0.5.5",
         "@inertiajs/progress": "^0.2.4",
         "admin-lte": "^3.0.5",
+        "moment": "^2.29.1",
+        "vform": "^1.0.1",
         "vue": "^2.6.12"
     }
 }

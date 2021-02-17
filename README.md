@@ -10,3 +10,7 @@ v.3 Login with 2 different user and page
     
     php artisan db:seed
     
+v.4 Fiture for Admin done
+
+    php artisan db:seed
+
