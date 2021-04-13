@@ -4,14 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Models\Transaction;
 use Illuminate\Http\Request;
-// use Auth;
+use Auth;
+use Carbon\Carbon;
+use App\Models\Category;
 use Inertia\Inertia;
 
 class TransactionController extends Controller
 {   
     public function __construct()
     {
-        $this->middleware('admin');
+        $this->middleware('user');
     }
 
     /**
@@ -20,11 +22,42 @@ class TransactionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {   
-        $data = Transaction::query()->orderByDesc('id')->get();
+    {           
+        $now = Carbon::now();
+        $month = Carbon::parse($now)->format('F');
+        $year = Carbon::parse($now)->year;
 
-        return Inertia::render('Admin/Transaction', [
-            'transactions' => $data
+        $id = Auth::id();
+
+        $incomes = Transaction::leftJoin('categories', 'categories.category_id', '=', 'transactions.category_id')
+                    ->where('type_of_transaction', 'Income')
+                    ->where('created_by', $id)
+                    ->whereMonth('date', date('m'))
+                    ->orderByDesc('date')
+                    ->get();
+                    
+        $amountIncome = $incomes->sum('amount') ;
+
+        $expenses = Transaction::leftJoin('categories', 'categories.category_id', '=', 'transactions.category_id')
+                    ->where('type_of_transaction', 'Expense')
+                    ->where('type_of_transaction', $id)
+                    ->whereMonth('date', date('m'))
+                    ->orderByDesc('date')
+                    ->get();
+        $amountExpense = $expenses->sum('amount') ;
+
+        $balance = $amountIncome - $amountExpense;
+        // dd($incomes);
+        // dd($month);
+        
+        return Inertia::render('User/Transaction/Index', [            
+            'month' => $month,
+            'year' => $year,
+            'incomes' => $incomes,
+            'amountIncome' => $amountIncome,
+            'expenses' => $expenses,
+            'amountExpense' => $amountExpense,
+            'balance' => $balance
         ]);
     }
 
@@ -34,8 +67,15 @@ class TransactionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
+    {     
+        return Inertia::render('User/Transaction/Create');
+    }
+    
+    public function getCategories(Request $request)
     {
-        //
+        $data = Category::where('type_of_transaction', $request->type_of_transaction)->get();
+
+        return response()->json($data);
     }
 
     /**
@@ -45,15 +85,25 @@ class TransactionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {    
+    {       
         // dd($request);
+        $id = Auth::id();
         $this->validate($request, [
-            'type_of_transaction' => 'required',
+            'amount'        => 'required|numeric',
+            'date'          => 'required|date',
+            'category_id'   => 'required',
+            'note'          => 'nullable'
         ]);
 
-        Transaction::create($request->all());
+        Transaction::create([
+            'amount'        => $request->amount,
+            'date'          => $request->date,
+            'category_id'   => $request->category_id,
+            'created_by'    => $id,
+            'note'          => $request->note,
+        ]);
 
-        return redirect()->route('admin.transaction.index')->with('message', 'Data Added Successfully');
+        return redirect()->route('user.transactions.index')->with('message', 'Data Added Successfully');
     }
 
     /**
@@ -74,8 +124,15 @@ class TransactionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(Transaction $transaction)
-    {
-        
+    {   
+        // dd($transaction);
+        $tot = ['Income', 'Expense'];
+        $categories = Category::all();
+        return Inertia::render('User/Transaction/Edit', [
+            'transaction' => $transaction,
+            'categories' => $categories,
+            'tot' => $tot,
+        ]);
     }
 
     /**
@@ -87,13 +144,16 @@ class TransactionController extends Controller
      */
     public function update(Request $request, Transaction $transaction)
     {
-        $this->validate($request, [
-            'type_of_transaction' => 'required',
+       $this->validate($request, [
+            'amount'        => 'required|numeric',
+            'date'          => 'required|date',
+            'category_id'   => 'required',
+            'note'          => 'nullable'
         ]);
 
         $transaction->update($request->all());
 
-        return redirect()->route('admin.transaction.index')->with('message', 'Data has been Changed Successfully');
+        return redirect()->route('user.transactions.index')->with('message', 'Data has been Changed Successfully');
     }
 
     /**
@@ -106,6 +166,6 @@ class TransactionController extends Controller
     {
         $transaction->delete();
 
-        return redirect()->route('admin.transaction.index');
+        return redirect()->route('user.transactions.index')->with('message', 'Data Deleted Successfully');
     }
 }

@@ -7,15 +7,28 @@ use Illuminate\Database\Eloquent\Model;
 
 class Transaction extends Model
 {
+
     use HasFactory;
+    protected $primaryKey = 'transaction_id';
+
 
     protected $table = 'transactions';
 
     protected $fillable = [
-		    'type_of_transaction',
+	    'amount',
+        'date',
+        'category_id',
+        'created_by',
+        'note'
     ];
-    
-    public function category(){
-		  return $this->hasMany(Category::class, 'type_of_transaction');
+
+    public function user(){
+		  return $this->belongsTo(User::class, 'added_by');
     }
+
+    public function category(){
+		  return $this->belongsTo(Category::class, 'category_id');
+    }
+    
+    
 }

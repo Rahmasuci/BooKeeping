@@ -9,24 +9,26 @@ class Category extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'category_id';
+
     protected $fillable = [
-		    'type_of_category',
-        'transaction_id',
-        'user_id',
+		'type_of_category',
+        'type_of_transaction',
+        'added_by',
     ];
 
     protected $hidden = [
-        'user_id',
+        'added_by',
     ];
 
     public $timestamps = true;
-    
-    public function transaction(){
-		  return $this->belongsTo(Transaction::class, 'type_of_transaction');
-    }
 
     public function user(){
-		  return $this->belongsTo(User::class, 'user_id');
+		  return $this->belongsTo(User::class, 'added_by');
+    }
+
+    public function transaction(){
+		  return $this->belongsTo(Transaction::class, 'category_id');
     }
 
 }

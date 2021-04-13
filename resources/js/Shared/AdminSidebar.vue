@@ -13,12 +13,12 @@
                             <p>Dashboard</p>
                         </inertia-link>
                     </li> 
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <inertia-link :href="$route('admin.transactions.index')" class="nav-link">
                             <i class="nav-icon fas fa-exchange-alt"></i>
                             <p>Transaction</p>
                         </inertia-link>
-                    </li> 
+                    </li>  -->
                     <li class="nav-item">
                         <inertia-link :href="$route('admin.categories.index')" class="nav-link">
                             <i class="nav-icon fas fa-tags"></i>

@@ -12,7 +12,7 @@ class CategoryController extends Controller
 {   
     public function __construct()
     {
-        $this->middleware('admin');
+        $this->middleware('auth');
     }
 
     /**
@@ -22,14 +22,36 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $data = Category::query()->with('transaction')->with('user')->orderByDesc('id')->get();
+        $roleUser       = Auth::user()->role;    
+        $userId         = Auth::id();   
+        // dd($userId);
 
-        $transaction = DB::table('transactions')->get();
+        $income = Category::query()->where('added_by', $userId)->where('type_of_transaction', 'Income')->orderByDesc('category_id')->get();
+        $expenditure = Category::query()->where('added_by', $userId)->where('type_of_transaction', 'Expense')->orderByDesc('category_id')->get();
 
-        return Inertia::render('Admin/Category', [
-            'categories' => $data,
-            'transactions' => $transaction
-        ]);
+        $uIncome = Category::query()->whereIn('added_by', [$userId, 1])->where('type_of_transaction', 'Income')->orderByDesc('category_id')->get();
+        $uExpenditure = Category::query()->whereIn('added_by', [$userId, 1])->where('type_of_transaction', 'Expense')->orderByDesc('category_id')->get();
+
+        $transactions = [
+            'Income',
+            'Expense'
+        ];
+
+        if ($roleUser == 'Admin') {      
+            $return = Inertia::render('Admin/Category', [
+                'income' => $income,
+                'expenditure' => $expenditure,
+                'transactions' => $transactions
+            ]);
+        } else {
+            $return = Inertia::render('User/Category', [
+                'income' => $uIncome,
+                'expenditure' => $uExpenditure,
+                'transactions' => $transactions
+            ]);
+        }
+        
+        return $return;
     }
 
     /**
@@ -54,17 +76,25 @@ class CategoryController extends Controller
         // dd($request);
 
         $this->validate($request, [
-            'type_of_category'  => 'required',
-            'type_of_transaction'    => 'required',
+            'type_of_category'      => 'required',
+            'type_of_transaction'   => 'required',
         ]);
 
         Category::create([
-            'type_of_category'  => $request->type_of_category,
-            'type_of_transaction'    => $request->type_of_transaction,
-            'user_id'           => $id,
+            'type_of_category'      => $request->type_of_category,
+            'type_of_transaction'   => $request->type_of_transaction,
+            'added_by'              => $id,
         ]);
 
-        return redirect()->route('admin.category.index')->with('message', 'Data Added Successfully');
+        $roleUser = Auth::user()->role; 
+        
+        if ($roleUser == 'Admin') {     
+            $return = redirect()->route('admin.categories.index')->with('message', 'Data Added Successfully');
+        } else {
+            $return = redirect()->route('user.categories.index')->with('message', 'Data Added Successfully');
+        }
+
+        return $return;
     }
 
     /**
@@ -105,7 +135,15 @@ class CategoryController extends Controller
 
         $category->update($request->all());
 
-        return redirect()->route('admin.category.index')->with('message', 'Data has been Changed Successfully');
+        $roleUser = Auth::user()->role; 
+        
+        if ($roleUser == 'Admin') {     
+            $return = redirect()->route('admin.categories.index')->with('message', 'Data Changed Successfully');
+        } else {
+            $return = redirect()->route('user.categories.index')->with('message', 'Data Changed Successfully');
+        }
+
+        return $return;
     }
 
     /**
@@ -118,6 +156,14 @@ class CategoryController extends Controller
     {
         $category->delete();
 
-        return redirect()->route('admin.category.index');
+        $roleUser = Auth::user()->role; 
+        
+        if ($roleUser == 'Admin') {     
+            $return = redirect()->route('admin.categories.index')->with('message', 'Data Deleted Successfully');
+        } else {
+            $return = redirect()->route('user.categories.index')->with('message', 'Data Deleted Successfully');
+        }
+
+        return $return;
     }
 }

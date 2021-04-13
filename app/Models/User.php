@@ -11,6 +11,8 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
+    protected $primaryKey = 'user_id';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -20,7 +22,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role_id',
+        'role',
     ];
 
     /**
@@ -42,11 +44,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function role(){
-		return $this->belongsTo(Role::class, 'role_id');
-    }
-
     public function category(){
 		  return $this->hasMany(Category::class, 'user_id');
+    }
+
+    public function transaction(){
+		  return $this->hasMany(Transaction::class, 'user_id');
     }
 }

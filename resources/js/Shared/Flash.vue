@@ -1,5 +1,5 @@
 <template>
-    <div class="row">
+    <div class="row" id="notif">
         <div class="col-md-4 col-sm-6 col-12">
 
         </div>

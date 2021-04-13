@@ -27,12 +27,10 @@ class HomeController extends Controller
     public function index()
     {
         $name = Auth::user()->name;
-        $transaction = DB::table('transactions')->count();
         $category = DB::table('categories')->count();
-        $user = DB::table('users')->where('role_id', 2)->count();
+        $user = DB::table('users')->where('role', 'User')->count();
         $data = [
             'name' => $name,
-            'transaction' => $transaction,
             'category' => $category,
             'user' => $user,
         ];
@@ -44,7 +42,7 @@ class HomeController extends Controller
 
     public function user()
     {
-        $users = DB::table('users')->where('role_id', 2)->get();
+        $users = DB::table('users')->where('role', 'User')->get();
 
         // dd($user);
         

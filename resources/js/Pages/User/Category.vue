@@ -51,22 +51,12 @@
                                                 <tr>
                                                     <th>No.</th>
                                                     <th>Category</th>
-                                                    <th>Added on</th>
-                                                    <th>Changed on</th>
-                                                    <th>Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <tr v-for="(i, index) in income" :key="index">     
                                                     <td>{{index+1}}</td>
                                                     <td>{{i.type_of_category}}</td>
-                                                    <td>{{i.created_at | formatDate}}
-                                                    </td>
-                                                    <td>{{i.updated_at | formatDate}}</td>
-                                                    <td>
-                                                        <button class="btn btn-warning btn-sm" @click="editModal(i)"><i class="fas fa-pencil-alt"></i> Edit </button>
-                                                        <button class="btn btn-danger btn-sm" type="button" @click="deleteCategory(i.id)"><i class="fas fa-trash-alt"></i> Delete </button>
-                                                    </td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -77,22 +67,12 @@
                                                 <tr>
                                                     <th>No.</th>
                                                     <th>Category</th>
-                                                    <th>Added on</th>
-                                                    <th>Changed on</th>
-                                                    <th>Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <tr v-for="(e, index) in expenditure" :key="index">     
                                                     <td>{{index+1}}</td>
                                                     <td>{{e.type_of_category}}</td>
-                                                    <td>{{e.created_at | formatDate}}
-                                                    </td>
-                                                    <td>{{e.updated_at | formatDate}}</td>
-                                                    <td>
-                                                        <button class="btn btn-warning btn-sm" @click="editModal(e)"><i class="fas fa-pencil-alt"></i> Edit </button>
-                                                        <button class="btn btn-danger btn-sm" type="button" @click="deleteCategory(e.id)"><i class="fas fa-trash-alt"></i> Delete </button>
-                                                    </td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -109,7 +89,6 @@
                         <div class="modal-content">  
                             <div class="card-header">
                                 <h3 class="card-title" v-show="!editmode" id="addNewLabel">Add Category</h3> 
-                                <h3 class="card-title" v-show="editmode" id="addNewLabel">Change Category</h3> 
                                 <div class="card-tools">
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
@@ -128,14 +107,12 @@
                                         <label for="tot">Type of Transaction</label>
                                         <select class="form-control" name="" id="tot" v-model="form.type_of_transaction" >
                                             <option value="" disabled>Select Transaction</option>
-                                            <option value="Income">Income</option>
-                                            <option value="Expense">Expense</option>
+                                            <option v-for="transaction in transactions" :key="transaction" v-bind:value="transaction">{{transaction}}</option>
                                         </select>
                                         <p id="erorr_tid" class="erorr">
                                         </p>
                                     </div>
                                     <button class="btn btn-success" v-show="!editmode" @click="save" type="button">Create</button>
-                                    <button class="btn btn-success" v-show="editmode" @click="update" type="button">Update</button>
                                 </form>
                             </div>
                         </div>
@@ -150,7 +127,7 @@
 
 <script>
 import Navbar from '../../Shared/Navbar'
-import Sidebar from '../../Shared/AdminSidebar'
+import Sidebar from '../../Shared/UserSidebar'
 import Footer from '../../Shared/Footer'
 import Flash from '../../Shared/Flash'
 export default {
@@ -168,22 +145,14 @@ export default {
             "responsive": true,
             "autoWidth": false,
             "order": [],
-            'columnDefs': [ {
-                    'targets': [4],
-                    'orderable': false,
-                }]
         });
         $("#list_expenditure").DataTable({
             "responsive": true,
             "autoWidth": false,
             "order": [],
-            'columnDefs': [ {
-                    'targets': [4],
-                    'orderable': false,
-                }]
         });
     },
-    props: ['income', 'expenditure'],
+    props: ['income', 'expenditure', 'transactions'],
     data() {
         return{
             form: new Form ({
@@ -219,15 +188,8 @@ export default {
             this.hideErorr();
             $('#modal').modal('show');
         },
-        editModal(transaction){   
-            console.log(transaction);
-            this.editmode = true; 
-            this.hideErorr();
-            $('#modal').modal('show');
-            this.form.fill(transaction);  
-        },
         async save() {
-            let response = await this.$inertia.post('/admin/categories', this.form, {
+            let response = await this.$inertia.post('/user/categories', this.form, {
                 onSuccess: () => {
                     console.log("Success")
                     $('#modal').modal('hide');
@@ -235,32 +197,8 @@ export default {
                 onError: (errors) => {                    
                     this.showErorr(errors);
                 },
-            })
-            
-        },
-        async update() {
-            let response = await this.$inertia.patch('/admin/categories/'+this.form.id, this.form, {
-                onSuccess: () => {
-                    console.log("Success")
-                    $('#modal').modal('hide');
-                },
-                onError: (errors) => {
-                    this.showErorr(errors); 
-                },
             })            
-        },
-        async deleteCategory(id){
-            if (!confirm('Are you sure want to remove?')) return;
-            let response = await this.$inertia.delete('/admin/categories/'+id, {
-                onSuccess: () => {
-                    console.log("Success")
-                    $('#modal').modal('hide');
-                },
-                onError: (errors) => {
-                    console.log(errors)
-                },
-            })            
-        }
+        }        
     }
 }
 </script>

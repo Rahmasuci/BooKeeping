@@ -1,7 +1,7 @@
 <template>
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
         <inertia-link :href="'/user'" class="brand-link">
-            <span class="brand-text font-weight-light">AdminLTE 3</span>
+            <span class="brand-text font-weight-light">BooKeeping</span>
         </inertia-link>
 
         <div class="sidebar"> 
@@ -13,35 +13,24 @@
                             <p>Dashboard</p>
                         </inertia-link>
                     </li> 
-                    <!-- <li class="nav-item has-treeview">
-                        <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-angle-down"></i>
-                        <p>
-                            Dropdown
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                        </a>
-                        <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Link 1</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Link 2</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Link 3</p>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>            -->
+                    <li class="nav-item">
+                        <inertia-link :href="$route('user.transactions.index')" class="nav-link">
+                            <i class="nav-icon fas fa-exchange-alt"></i>
+                            <p>Transaction</p>
+                        </inertia-link>
+                    </li> 
+                    <li class="nav-item">
+                        <inertia-link :href="$route('user.page-report')" class="nav-link">
+                            <i class="nav-icon fas fa-chart-area"></i>
+                            <p>Report</p>
+                        </inertia-link>
+                    </li> 
+                    <li class="nav-item">
+                        <inertia-link :href="$route('user.categories.index')"  class="nav-link">
+                            <i class="nav-icon fas fa-tags"></i>
+                            <p>Category</p>
+                        </inertia-link>
+                    </li>
                 </ul>
             </nav>
         </div>
