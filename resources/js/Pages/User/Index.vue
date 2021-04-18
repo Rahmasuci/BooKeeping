@@ -8,7 +8,7 @@
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1>Hai {{name}}</h1>
+                            <h1>Transactions This Year</h1>
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
@@ -54,11 +54,19 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-12">                            
-                            <apexchart :width="transactionChart.width" :height="300" :type="transactionChart.type" :options="transactionChart.options" :series="transactionChart.series"></apexchart>
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body">                                                  
+                                    <apexchart :width="transactionChart.width" :height="300" :type="transactionChart.type" :options="transactionChart.options" :series="transactionChart.series"></apexchart>
+                                </div>    
+                            </div>              
                         </div>
-                        <div class="col-12">                            
-                            <apexchart :width="categoryChart.width" :height="300" :type="categoryChart.type" :options="categoryChart.options" :series="categoryChart.series"></apexchart>
+                        <div class="col-6">
+                            <div class="card">
+                                <div class="card-body">     
+                                    <apexchart :width="categoryChart.width" :height="300" :type="categoryChart.type" :options="categoryChart.options" :series="categoryChart.series"></apexchart>
+                                </div>
+                            </div>   
                         </div>
                     </div>
                 </div>

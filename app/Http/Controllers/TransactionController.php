@@ -144,6 +144,7 @@ class TransactionController extends Controller
      */
     public function update(Request $request, Transaction $transaction)
     {
+        // dd($request);
        $this->validate($request, [
             'amount'        => 'required|numeric',
             'date'          => 'required|date',

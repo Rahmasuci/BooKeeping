@@ -71,8 +71,11 @@ class PageController extends Controller
         $category = Transaction::query()
                     ->leftJoin('categories', 'categories.category_id', '=', 'transactions.category_id')
                     ->whereIn('added_by', [$userId, 1])
+                    ->where('type_of_transaction', 'Expense')
                     ->where('created_by', [$userId])
+                    ->whereYear('date', $year)
                     ->groupBy('type_of_category')
+                    ->limit(5)
                     ->pluck('type_of_category')
                     ->toArray();
         
@@ -82,6 +85,7 @@ class PageController extends Controller
             $amountCategory = Transaction::leftJoin('categories', 'categories.category_id', '=', 'transactions.category_id')
                     ->whereIn('added_by', [$userId, 1])
                     ->where('created_by', [$userId])
+                    ->whereYear('date', $year)
                     ->where('type_of_category', $key)
                     ->get();
             $sumCategory = $amountCategory->sum('amount');
@@ -89,10 +93,9 @@ class PageController extends Controller
         }   
         
         $categoryChart = LarapexChart::pieChart()
-                    ->setTitle('Category')
+                    ->setTitle('Top 5 Categories This Year')
                     ->addData($totalCategory)
-                    ->setColors(['#008FFB', '#00E396', '#feb019', '#ff455f', '#775dd0', '#80effe',
-                                '#0077B5', '#ff6384', '#c9cbcf', '#0057ff', '00a9f4', '#2ccdc9', '#5e72e4'])
+                    ->setColors(['#008FFB', '#00E396', '#feb019', '#ff455f', '#775dd0'])
                     ->setLabels($category)
                     ->toVue();    
                

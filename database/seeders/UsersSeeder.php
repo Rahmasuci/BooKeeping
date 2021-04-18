@@ -19,7 +19,7 @@ class UsersSeeder extends Seeder
             'name' => 'admin',
             'email' => 'admin@admin.com',
             'password' => bcrypt('password'),
-            'role_id' => '1',
+            'role' => 'Admin',
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
         ]);
@@ -27,7 +27,7 @@ class UsersSeeder extends Seeder
             'name' => 'user',
             'email' => 'user@user.com',
             'password' => bcrypt('password'),
-            'role_id' => '2',
+            'role' => 'User',
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
         ]);
